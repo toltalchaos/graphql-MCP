@@ -2,7 +2,7 @@ from flask import Flask
 import strawberry
 from strawberry import Schema
 from strawberry.flask.views import GraphQLView
-from typing import Annotated
+from typing import Annotated, List
 
 from fastmcp import FastMCP
 from flask_cors import CORS
