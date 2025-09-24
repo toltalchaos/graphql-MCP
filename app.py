@@ -2,6 +2,7 @@ from flask import Flask
 import strawberry
 from strawberry import Schema
 from strawberry.flask.views import GraphQLView
+from typing import Annotated
 
 from fastmcp import FastMCP
 from flask_cors import CORS
@@ -10,15 +11,22 @@ app = Flask(__name__)
 mcp = FastMCP(name = 'graphql_example')
 CORS(app)
 
+# define the return object type and description
+@strawberry.type
+class ReturnString:
+	greeting: str = strawberry.field(
+		description="a greeting returned using the name passed in from the query"
+		)
 
 # Define GraphQL schema
 @strawberry.type
 class Query:
-    hello: str = "stranger"
-
     @strawberry.field
-    def resolve_hello(self, info, name: str = "stranger") -> str:
-        return f"Hello, {name}!"
+    def resolve_hello(self, info, 
+		name: Annotated[str,
+		strawberry.argument(description="an optional name to provide for the response")
+		] = 'stranger') -> ReturnString:
+	    return ReturnString(greeting = f"Hello {name}!")
 
 schema = Schema(query=Query)
 
@@ -40,7 +48,7 @@ def schema_info():
     return str(schema)
 
 @mcp.tool(
-    description="a simple tool for the LLM to use for running queries against the GraphQL endpoint, graphql schema documentation is available at /schema_info or in the schema_info tool. this intakes a single string argument which is the query to run and returns the results as a string",
+    description=f"a simple tool for the LLM to use for running queries against the GraphQL endpoint, Graphql Schema is as follows: {str(schema)}",
     name="Run GraphQL Query" 
 )
 def run_query(query_string: str) -> str:
