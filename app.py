@@ -60,4 +60,11 @@ def run_query(query_string: str) -> str:
     return str(result.data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == 'mcp':
+        # Run MCP server
+        mcp.run(port=8001)  # MCP server on port 8001
+    else:
+        # Run Flask server
+        app.run(debug=True, port=5000)  # Flask server on port 5000

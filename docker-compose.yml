@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  flask-mcp-app:
+    build: .
+    container_name: flask-mcp-container
+    ports:
+      - "5000:5000"  # Flask server port
+      - "8001:8001"  # MCP server port
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount the current directory for development (optional)
+      - .:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/schema_info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
