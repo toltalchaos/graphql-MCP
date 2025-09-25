@@ -2,7 +2,7 @@
 
 This project runs a Flask GraphQL server and an MCP (Model Context Protocol) server on different ports.
 
-## 🐳 Docker Setup (Recommended)
+## 🐳 Docker Setup (Recommended) --desktop with MCP enabled
 
 ### Quick Start with Docker Compose
 ```bash
